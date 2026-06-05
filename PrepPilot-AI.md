@@ -96,7 +96,7 @@ https://github.com/MDMBC/PrepPilot-AI
 
 ## Demo Video
 
-(To be added)
+https://drive.google.com/file/d/1p522PdPyo5iXR4yrkbsMa9WpHNJywG_G/view?usp=drive_link
 
 ---
 
