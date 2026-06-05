@@ -90,7 +90,7 @@ https://github.com/MDMBC/PrepPilot-AI
 
 ## Deployed Site URL
 
-(To be added after deployment)
+https://prep-pilot-ai-rust.vercel.app/
 
 ---
 
