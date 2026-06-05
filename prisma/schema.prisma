@@ -1,0 +1,149 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+model User {
+  id              String                   @id @default(cuid())
+  name            String
+  email           String                   @unique
+  passwordHash    String
+  emailVerifiedAt DateTime?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  verifications   EmailVerificationToken[]
+  interviews      InterviewSession[]
+  passwordResets  PasswordResetToken[]
+  resumes         Resume[]
+  sessions        Session[]
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Resume {
+  id        String             @id @default(cuid())
+  userId    String
+  fileName  String
+  mimeType  String
+  text      String
+  summary   String?
+  skills    String[]
+  createdAt DateTime           @default(now())
+  sessions  InterviewSession[]
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks    ResumeChunk[]
+}
+
+model ResumeChunk {
+  id        String                 @id @default(cuid())
+  resumeId  String
+  content   String
+  embedding Unsupported("vector")?
+  createdAt DateTime               @default(now())
+  resume    Resume                 @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}
+
+model InterviewSession {
+  id            String              @id @default(cuid())
+  userId        String
+  resumeId      String?
+  role          String
+  difficulty    Difficulty
+  interviewType InterviewType
+  mode          InterviewMode
+  status        InterviewStatus     @default(ACTIVE)
+  finalScore    Int?
+  reportJson    Json?
+  reportText    String?
+  createdAt     DateTime            @default(now())
+  completedAt   DateTime?
+  answers       InterviewAnswer[]
+  questions     InterviewQuestion[]
+  resume        Resume?             @relation(fields: [resumeId], references: [id])
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model InterviewQuestion {
+  id        String           @id @default(cuid())
+  sessionId String
+  sequence  Int
+  text      String
+  focusArea String
+  createdAt DateTime         @default(now())
+  answer    InterviewAnswer?
+  session   InterviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, sequence])
+}
+
+model InterviewAnswer {
+  id                 String            @id @default(cuid())
+  sessionId          String
+  questionId         String            @unique
+  transcript         String
+  grammarScore       Int
+  pronunciationScore Int
+  relevanceScore     Int
+  structureScore     Int
+  confidenceScore    Int
+  overallScore       Int
+  feedbackJson       Json
+  audioUrl           String?
+  createdAt          DateTime          @default(now())
+  question           InterviewQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  session            InterviewSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+enum Difficulty {
+  FOUNDATION
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum InterviewType {
+  HR
+  TECHNICAL
+}
+
+enum InterviewMode {
+  VOICE_MOCK
+  ASSISTED_PRACTICE
+}
+
+enum InterviewStatus {
+  ACTIVE
+  COMPLETED
+}
