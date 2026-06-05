@@ -1,6 +1,16 @@
 # PrepPilot AI
 
-Full-stack AI interview preparation platform built with Next.js, TypeScript, Tailwind, Next API routes, Prisma, PostgreSQL, pgvector, and the OpenAI API.
+AI-powered interview preparation platform with resume analysis, mock interviews, performance scoring, and personalized learning roadmaps.
+
+PrepPilot AI is a full-stack interview preparation app built with Next.js, TypeScript, Tailwind CSS, Next API routes, Prisma, PostgreSQL, pgvector, and Gemini/OpenAI provider support.
+
+## Problem Statement
+
+Many students struggle to prepare effectively for technical and HR interviews due to a lack of personalized guidance and realistic practice opportunities.
+
+## Solution
+
+PrepPilot AI provides resume analysis, AI-generated interview questions, mock interview practice, performance scoring, personalized learning roadmaps, and a progress dashboard.
 
 ## Features
 
@@ -12,6 +22,18 @@ Full-stack AI interview preparation platform built with Next.js, TypeScript, Tai
 - Browser speech recognition for user answers
 - AI answer evaluation for grammar, pronunciation, relevance, structure, confidence, and final score
 - Dashboard with interview history, resume scans, scores, reports, and improvement suggestions
+
+## Tech Stack
+
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+- Prisma
+- PostgreSQL with pgvector
+- Gemini API
+- Optional OpenAI transcription
+- Nodemailer SMTP
 
 ## Setup
 
@@ -25,20 +47,15 @@ npm install
 
 ```bash
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/preppilot_ai?schema=public"
-AI_PROVIDER="openai"
-OPENAI_API_KEY="sk-your-key"
-NEXT_PUBLIC_APP_URL="http://localhost:3010"
-```
-
-To use Gemini for text generation and embeddings instead of OpenAI, create a Gemini API key in Google AI Studio and change the AI settings:
-
-```bash
 AI_PROVIDER="gemini"
 GEMINI_API_KEY="your-gemini-api-key"
 GEMINI_BASE_URL="https://generativelanguage.googleapis.com/v1beta"
 GEMINI_CHAT_MODEL="gemini-2.5-flash"
 GEMINI_EMBEDDING_MODEL="gemini-embedding-001"
+NEXT_PUBLIC_APP_URL="http://localhost:3010"
 ```
+
+`OPENAI_API_KEY` is optional. Add it only if you want server-side audio transcription support.
 
 3. Start a PostgreSQL database with pgvector:
 
@@ -108,10 +125,8 @@ SMTP_PASS="your-app-password"
 SMTP_FROM="PrepPilot AI <your-address@gmail.com>"
 ```
 
-`OPENAI_API_KEY` is optional. Add it only if you want server-side audio transcription support.
-
 The Render database is configured with external access blocked in `render.yaml`. The app still connects through Render's private database connection string. The Prisma schema enables the `vector` extension for resume embeddings, and Render Postgres supports pgvector.
 
 ## AI Provider Behavior
 
-The app uses the configured AI provider for resume analysis, embeddings, question generation, answer scoring, and final reports. Set `AI_PROVIDER="openai"` to use OpenAI or `AI_PROVIDER="gemini"` to use Gemini. Speech transcription still uses OpenAI when `OPENAI_API_KEY` is available because Gemini text generation and embedding endpoints do not replace the app's audio transcription flow. If the configured provider is unavailable, the interview flow falls back to deterministic templates and heuristic scoring so the product remains demoable.
+The app uses the configured AI provider for resume analysis, embeddings, question generation, answer scoring, and final reports. Set `AI_PROVIDER="gemini"` to use Gemini or `AI_PROVIDER="openai"` to use OpenAI. Speech transcription still uses OpenAI when `OPENAI_API_KEY` is available because Gemini text generation and embedding endpoints do not replace the app's audio transcription flow. If the configured provider is unavailable, the interview flow falls back to deterministic templates and heuristic scoring so the product remains demoable.
