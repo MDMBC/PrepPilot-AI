@@ -154,30 +154,42 @@ For Gmail, use an app password rather than your normal account password. Users a
 
 The sign-in page includes a forgot-password link. PrepPilot sends a secure reset link to the registered email address, the link expires after 1 hour, and active sessions are cleared after the password changes.
 
-## Deploying on Render
+## Deploying on Vercel with Neon
 
-This repository includes a `render.yaml` Blueprint that creates:
+This project is deployed on Vercel and uses Neon PostgreSQL for the database.
 
-- A Node web service for the Next.js app
-- A Render Postgres database connected through `DATABASE_URL`
-- A pre-deploy step that runs Prisma migrations with `npm run prisma:deploy`
+Before deploying, commit your Prisma migrations and code changes. Use production migrations with `npm run prisma:deploy`; do not use `prisma migrate dev` in production.
 
-Before deploying, commit your Prisma migrations and code changes. Render uses production migrations, so do not use `prisma migrate dev` in production.
-
-1. Push the repository to GitHub or GitLab.
-2. In Render, create a new Blueprint from the repository.
-3. When Render prompts for secret environment variables, provide:
+1. Create a Neon PostgreSQL database.
+2. Copy the Neon connection string and set it as `DATABASE_URL`.
+3. Push the repository to GitHub.
+4. Import the repository into Vercel.
+5. In Vercel, add these environment variables:
 
 ```bash
+DATABASE_URL="your-neon-postgres-connection-string"
+AI_PROVIDER="gemini"
 GEMINI_API_KEY="your-gemini-api-key"
-NEXT_PUBLIC_APP_URL="https://your-render-service.onrender.com"
+GEMINI_BASE_URL="https://generativelanguage.googleapis.com/v1beta"
+GEMINI_CHAT_MODEL="gemini-2.5-flash"
+GEMINI_EMBEDDING_MODEL="gemini-embedding-001"
+NEXT_PUBLIC_APP_URL="https://your-vercel-domain.vercel.app"
 SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="587"
 SMTP_USER="your-address@gmail.com"
 SMTP_PASS="your-app-password"
 SMTP_FROM="PrepPilot AI <your-address@gmail.com>"
 ```
 
-The Render database is configured with external access blocked in `render.yaml`. The app still connects through Render's private database connection string. The Prisma schema enables the `vector` extension for resume embeddings, and Render Postgres supports pgvector.
+6. Run production migrations against Neon:
+
+```bash
+npm run prisma:deploy
+```
+
+7. Deploy the app from Vercel.
+
+The Prisma schema enables the `vector` extension for resume embeddings, so make sure your Neon database supports the pgvector extension.
 
 ## AI Provider Behavior
 
