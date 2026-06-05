@@ -1,6 +1,12 @@
-# PrepPilot AI
+# PrepPilot AI - AI Interview Preparation Platform
 
-AI-powered interview preparation platform with resume analysis, mock interviews, performance scoring, and personalized learning roadmaps.
+## GitHub Handle
+
+MDMBC
+
+## Project Title
+
+PrepPilot AI: AI-Powered Interview Preparation Platformwith resume analysis, mock interviews, performance scoring, and personalized learning roadmaps.
 
 PrepPilot AI is a full-stack interview preparation app built with Next.js, TypeScript, Tailwind CSS, Next API routes, Prisma, PostgreSQL, pgvector, and Gemini/OpenAI provider support.
 
@@ -11,6 +17,25 @@ Many students struggle to prepare effectively for technical and HR interviews du
 ## Solution
 
 PrepPilot AI provides resume analysis, AI-generated interview questions, mock interview practice, performance scoring, personalized learning roadmaps, and a progress dashboard.
+
+## Inspiration Behind the Project
+
+Interview preparation remains one of the biggest challenges for students and early-career professionals. While countless learning resources exist online, most candidates lack access to personalized feedback and realistic interview practice.
+
+Many students know the technical concepts required for a role but struggle to communicate effectively under interview pressure. Traditional preparation methods such as reading interview questions or watching videos do not simulate real interview environments and rarely provide actionable feedback.
+
+I built PrepPilot AI to bridge this gap by creating a virtual AI interviewer capable of conducting personalized mock interviews, analyzing responses, identifying weaknesses, and generating improvement plans.
+
+PrepPilot AI helps candidates:
+
+* Practice interviews anytime, anywhere
+* Receive instant AI-powered feedback
+* Improve communication and confidence
+* Track interview readiness over time
+* Prepare for both HR and technical interviews
+* Learn from personalized recommendations
+
+The project showcases how modern AI technologies can democratize career preparation and provide affordable, accessible interview coaching at scale.
 
 ## Features
 
@@ -157,6 +182,28 @@ The Render database is configured with external access blocked in `render.yaml`.
 ## AI Provider Behavior
 
 The app uses the configured AI provider for resume analysis, embeddings, question generation, answer scoring, and final reports. Set `AI_PROVIDER="gemini"` to use Gemini or `AI_PROVIDER="openai"` to use OpenAI. Speech transcription still uses OpenAI when `OPENAI_API_KEY` is available because Gemini text generation and embedding endpoints do not replace the app's audio transcription flow. If the configured provider is unavailable, the interview flow falls back to deterministic templates and heuristic scoring so the product remains demoable.
+
+---
+
+## Project Repository
+
+GitHub Repository:
+
+https://github.com/MDMBC/PrepPilot-AI
+
+---
+
+## Deployed Site URL
+
+https://prep-pilot-ai-rust.vercel.app/
+
+---
+
+## Demo Video
+
+https://drive.google.com/file/d/1p522PdPyo5iXR4yrkbsMa9WpHNJywG_G/view?usp=drive_link
+
+---
 
 ## Key Features Demonstrated
 
